@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme" parent="AppTheme.Base">
+        <item name="windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:colorPrimary">@color/cyan_500</item>
+        <item name="android:colorPrimaryDark">@color/cyan_700</item>
+        <item name="android:colorAccent">@color/cyan_500</item>
+        <item name="android:navigationBarColor">@color/cyan_700</item>
+
+    </style>
+</resources>
