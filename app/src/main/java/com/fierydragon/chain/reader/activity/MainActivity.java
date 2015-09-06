@@ -10,6 +10,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.fierydragon.chain.reader.R;
+import com.fierydragon.chain.reader.adapter.RecyclerViewMainActivityAdapter;
+import com.fierydragon.chain.reader.data.articleData;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -17,23 +22,38 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbarMainActivity;
     private RecyclerView recyclerViewMainActivity;
 
+    private List<articleData> articleDataList;
+    private RecyclerViewMainActivityAdapter mainActivityAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         mContext = this;
-        initView();
+        initToolbar();
+        initRecyclerView();
     }
 
-    private void initView() {
+    private void initToolbar() {
         toolbarMainActivity = (Toolbar) findViewById(R.id.toolbar);
         toolbarMainActivity.setTitle(getString(R.string.app_name));
         setSupportActionBar(toolbarMainActivity);
+    }
 
+    private void initRecyclerView() {
         recyclerViewMainActivity = (RecyclerView) findViewById(R.id.recyclerview_activity_main);
         recyclerViewMainActivity.setLayoutManager(new LinearLayoutManager(mContext));
 
+        // TODO 文章分段
+        articleDataList = new ArrayList<>();
+        articleDataList.add(new articleData("Unit 1 Lesson 1", "Finding fossil man", getString(R.string.test_artical_content)));
+        articleDataList.add(new articleData("Unit 1 Lesson 2", "Finding fossil man", getString(R.string.test_artical_content)));
+        articleDataList.add(new articleData("Unit 1 Lesson 3", "Finding fossil man", getString(R.string.test_artical_content)));
+        articleDataList.add(new articleData("Unit 1 Lesson 4", "Finding fossil man", getString(R.string.test_artical_content)));
+
+        mainActivityAdapter = new RecyclerViewMainActivityAdapter(mContext, articleDataList);
+        recyclerViewMainActivity.setAdapter(mainActivityAdapter);
     }
 
     @Override

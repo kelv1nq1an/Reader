@@ -11,9 +11,15 @@ Reader
 
 Todo
 ---
-- [ ] 首页文章列表 - recyclerView + CardView
-- [ ] 文章页面 FloatingActionBar + slidebar
-- [ ] 文章提取入数据库
-- [ ] 单词提取入数据库
+- [ ] 首页文章列表
+	- [X] recyclerView 
+	- [X] CardView
+- [ ] 文章页面
+	- [ ] button
+	- [X] slidebar
+- [ ] 文章提取
 - [ ] 单词匹配
+
+<del> - [ ] 文章提取入数据库
+<del> - [ ] 单词提取入数据库
 
