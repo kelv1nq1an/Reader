@@ -2,9 +2,10 @@ Reader
 ---
 此项目为测验练手用，是一个简易的分级列表阅读程序。
 
-Demo
+Demo下载
 ---
-https://github.com/kelv1nq1an/Reader/DemoApk
+https://github.com/kelv1nq1an/Reader/tree/master/DemoApk
+
 进度
 ---
 完成所有要求，进入测试阶段。
