@@ -7,13 +7,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
 import android.text.style.BackgroundColorSpan;
+import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.fierydragon.chain.reader.App;
 import com.fierydragon.chain.reader.R;
@@ -97,6 +100,9 @@ public class ArticleActivity extends AppCompatActivity {
     }
 
     private void highLightWords(int level) {
+
+
+
         int number = words[level].length;
         spannableString = new SpannableString(articleContent);
         String word = "";
@@ -121,7 +127,15 @@ public class ArticleActivity extends AppCompatActivity {
             Log.i(TAG, "level = " + level + " word = " + word + " start = " + wordStartIndex + " end = " + wordEndIndex);
         }
 
+        ClickableSpan clickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(View view) {
+                
+            }
+        };
+
         articleContentTV.setText(spannableString);
+        articleContentTV.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     private void initToolbar() {

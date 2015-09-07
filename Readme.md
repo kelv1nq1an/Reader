@@ -4,7 +4,7 @@ Reader
 
 Demo下载
 ---
-https://github.com/kelv1nq1an/Reader/tree/master/DemoApk
+https://github.com/kelv1nq1an/Reader/releases/tag/v1.0
 
 进度
 ---
