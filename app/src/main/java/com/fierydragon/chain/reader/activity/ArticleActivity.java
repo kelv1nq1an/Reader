@@ -102,7 +102,6 @@ public class ArticleActivity extends AppCompatActivity {
     private void highLightWords(int level) {
 
 
-
         int number = words[level].length;
         spannableString = new SpannableString(articleContent);
         String word = "";
@@ -120,19 +119,15 @@ public class ArticleActivity extends AppCompatActivity {
                     nextChar = articleContent.charAt(wordEndIndex);
                     if (!(Character.isLetter(preChar) || Character.isLetter(nextChar))) {
                         spannableString.setSpan(new BackgroundColorSpan(Color.YELLOW), wordStartIndex, wordEndIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                        WordClickableSpan wordClickableSpan = new WordClickableSpan(mContext, word);
+                        spannableString.setSpan(wordClickableSpan, wordStartIndex, wordEndIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                     }
                 }
             }
 
             Log.i(TAG, "level = " + level + " word = " + word + " start = " + wordStartIndex + " end = " + wordEndIndex);
         }
-
-        ClickableSpan clickableSpan = new ClickableSpan() {
-            @Override
-            public void onClick(View view) {
-                
-            }
-        };
 
         articleContentTV.setText(spannableString);
         articleContentTV.setMovementMethod(LinkMovementMethod.getInstance());
@@ -208,5 +203,22 @@ public class ArticleActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+}
+
+class WordClickableSpan extends ClickableSpan {
+
+    String wordClicked;
+    Context mContext;
+
+    public WordClickableSpan(Context context, String text) {
+        super();
+        this.mContext = context;
+        wordClicked = text;
+    }
+
+    @Override
+    public void onClick(View view) {
+        Toast.makeText(mContext, wordClicked, Toast.LENGTH_SHORT).show();
     }
 }
