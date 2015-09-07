@@ -2,6 +2,13 @@ Reader
 ---
 此项目为测验练手用，是一个简易的分级列表阅读程序。
 
+Demo
+---
+https://github.com/kelv1nq1an/Reader/DemoApk
+进度
+---
+完成所有要求，进入测试阶段。
+
 要求
 ---
 1. 打开后看到文章列表
@@ -11,15 +18,16 @@ Reader
 
 Todo
 ---
-- [ ] 首页文章列表
+- [X] 首页文章列表
 	- [X] recyclerView 
 	- [X] CardView
-- [ ] 文章页面
-	- [ ] button
+- [X] 文章页面
+	- [X] button
 	- [X] slidebar
-- [ ] 文章提取
-- [ ] 单词匹配
+- [X] 文章提取
+- [X] 单词匹配
 
 <del> - [ ] 文章提取入数据库
+
 <del> - [ ] 单词提取入数据库
 

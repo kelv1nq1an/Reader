@@ -1,9 +1,9 @@
 package com.fierydragon.chain.reader.data;
 
-public class articleData {
-    private static final String TAG = "articleData";
+public class ArticleData {
+    private static final String TAG = "ArticleData";
 
-    public articleData(String articleCategory, String articleName, String articleContent) {
+    public ArticleData(String articleCategory, String articleName, String articleContent) {
         setArticleCategory(articleCategory);
         setArticleName(articleName);
         setArticleContent(articleContent);

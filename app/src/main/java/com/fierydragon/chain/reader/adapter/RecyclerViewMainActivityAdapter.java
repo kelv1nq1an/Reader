@@ -12,16 +12,19 @@ import android.widget.Toast;
 
 import com.fierydragon.chain.reader.R;
 import com.fierydragon.chain.reader.activity.ArticleActivity;
-import com.fierydragon.chain.reader.data.articleData;
+import com.fierydragon.chain.reader.data.ArticleData;
 
 import java.util.List;
 
+/**
+ * Copyright KelvinQian
+ */
 public class RecyclerViewMainActivityAdapter extends RecyclerView.Adapter<RecyclerViewMainActivityAdapter.ViewHolder> {
     private static final String TAG = "RecyclerViewMainActivityAdapter";
     private Context mContext;
-    private List<articleData> articleList;
+    private List<ArticleData> articleList;
 
-    public RecyclerViewMainActivityAdapter(Context context, List<articleData> list) {
+    public RecyclerViewMainActivityAdapter(Context context, List<ArticleData> list) {
         this.articleList = list;
         this.mContext = context;
     }
@@ -41,7 +44,7 @@ public class RecyclerViewMainActivityAdapter extends RecyclerView.Adapter<Recycl
         holder.readMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(mContext, "click", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(mContext, "click", Toast.LENGTH_SHORT).show();
                 Intent articleIntent = new Intent(mContext, ArticleActivity.class);
                 articleIntent.putExtra(mContext.getString(R.string.article_name), articleList.get(position).getArticleName());
                 articleIntent.putExtra(mContext.getString(R.string.article_category), articleList.get(position).getArticleCategory());

@@ -1,32 +1,46 @@
 package com.fierydragon.chain.reader.activity;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.BackgroundColorSpan;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.fierydragon.chain.reader.App;
 import com.fierydragon.chain.reader.R;
+
+import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
 
 /**
  * Copyright KelvinQian
  */
-public class ArticleActivity extends AppCompatActivity implements SeekBar.OnSeekBarChangeListener {
+public class ArticleActivity extends AppCompatActivity {
     private static final String TAG = "ArticleActivity";
     private Context mContext;
     private Toolbar toolbarArticleActivity;
     private TextView articleCategoryTV;
     private TextView articleNameTV;
     private TextView articleContentTV;
-    private SeekBar articleWordsSeekBar;
+    private DiscreteSeekBar articleWordsSeekBar;
 
     private String articleCategory;
     private String articleName;
     private String articleContent;
+    private int wordLevel;
 
+    private SpannableString spannableString;
+
+    private App app;
+    private String[][] words;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,12 +48,80 @@ public class ArticleActivity extends AppCompatActivity implements SeekBar.OnSeek
         setContentView(R.layout.activity_artical);
 
         mContext = this;
+        wordLevel = 0;
         getIntentData();
         initToolbar();
         initArticle();
-        articleWordsSeekBar = (SeekBar) findViewById(R.id.seekbar_articleactivity);
-        articleWordsSeekBar.setOnSeekBarChangeListener(this);
+        articleWordsSeekBar = (DiscreteSeekBar) findViewById(R.id.seekbar_articleactivity);
+        articleWordsSeekBar.setVisibility(View.GONE);
+        articleWordsSeekBar.setOnProgressChangeListener(new DiscreteSeekBar.OnProgressChangeListener() {
+            @Override
+            public void onProgressChanged(DiscreteSeekBar discreteSeekBar, int i, boolean b) {
+                wordLevel = i;
+                switch (i) {
+                    case 0:
+                        highLightWords(0);
+                        break;
+                    case 1:
+                        highLightWords(1);
+                        break;
+                    case 2:
+                        highLightWords(2);
+                        break;
+                    case 3:
+                        highLightWords(3);
+                        break;
+                    case 4:
+                        highLightWords(4);
+                        break;
+                    case 5:
+                        highLightWords(5);
+                        break;
+                }
+            }
 
+            @Override
+            public void onStartTrackingTouch(DiscreteSeekBar discreteSeekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(DiscreteSeekBar discreteSeekBar) {
+
+            }
+        });
+
+        app = (App) getApplication();
+        words = app.getWords();
+
+    }
+
+    private void highLightWords(int level) {
+        int number = words[level].length;
+        spannableString = new SpannableString(articleContent);
+        String word = "";
+        for (int i = 0; i < number; i++) {
+            int wordStartIndex = 0;
+            int wordEndIndex = 0;
+            char preChar;
+            char nextChar;
+            word = words[level][i];
+            while (wordStartIndex != -1) {
+                wordStartIndex = articleContent.indexOf(word, wordEndIndex);
+                if (wordStartIndex != -1) {
+                    wordEndIndex = wordStartIndex + word.length();
+                    preChar = articleContent.charAt(wordStartIndex - 1);
+                    nextChar = articleContent.charAt(wordEndIndex);
+                    if (!(Character.isLetter(preChar) || Character.isLetter(nextChar))) {
+                        spannableString.setSpan(new BackgroundColorSpan(Color.YELLOW), wordStartIndex, wordEndIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    }
+                }
+            }
+
+            Log.i(TAG, "level = " + level + " word = " + word + " start = " + wordStartIndex + " end = " + wordEndIndex);
+        }
+
+        articleContentTV.setText(spannableString);
     }
 
     private void initToolbar() {
@@ -87,32 +169,30 @@ public class ArticleActivity extends AppCompatActivity implements SeekBar.OnSeek
     }
 
     @Override
-    public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_article, menu);
+        return true;
     }
 
     @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
 
-    }
-
-    @Override
-    public void onStopTrackingTouch(SeekBar seekBar) {
-        //seekBar = articleWordsSeekBar;
-        Log.i(TAG, "seekbar" + seekBar.getProgress());
-        int seekProgress = seekBar.getProgress();
-        if (seekProgress < 20) {
-            seekBar.setProgress(0);
-        } else if (seekProgress >= 20 && seekProgress < 40) {
-            seekBar.setProgress(20);
-        } else if (seekProgress >= 40 && seekProgress < 60) {
-            seekBar.setProgress(40);
-        } else if (seekProgress >= 60 && seekProgress < 80) {
-            seekBar.setProgress(60);
-        } else if (seekProgress >= 80 && seekProgress < 100) {
-            seekBar.setProgress(80);
-        } else if (seekProgress >= 100) {
-            seekBar.setProgress(100);
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.article_highlight) {
+            if (articleWordsSeekBar.getVisibility() == View.VISIBLE) {
+                articleWordsSeekBar.setVisibility(View.GONE);
+                articleContentTV.setText(articleContent);
+            } else {
+                articleWordsSeekBar.setVisibility(View.VISIBLE);
+                highLightWords(wordLevel);
+            }
+            return true;
         }
+
+        return super.onOptionsItemSelected(item);
     }
 }

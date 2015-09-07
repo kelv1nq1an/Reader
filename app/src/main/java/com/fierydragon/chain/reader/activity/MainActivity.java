@@ -9,20 +9,30 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.fierydragon.chain.reader.App;
 import com.fierydragon.chain.reader.R;
 import com.fierydragon.chain.reader.adapter.RecyclerViewMainActivityAdapter;
-import com.fierydragon.chain.reader.data.articleData;
+import com.fierydragon.chain.reader.data.ArticleData;
+import com.fierydragon.chain.reader.util.ArticleUtils;
+import com.fierydragon.chain.reader.util.FileUtils;
+import com.fierydragon.chain.reader.util.WordsUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Copyright KelvinQian
+ */
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private Context mContext;
+    private App app;
     private Toolbar toolbarMainActivity;
     private RecyclerView recyclerViewMainActivity;
 
-    private List<articleData> articleDataList;
+    private List<ArticleData> articleDataList;
+    private String[][] words;
     private RecyclerViewMainActivityAdapter mainActivityAdapter;
 
     @Override
@@ -32,7 +42,37 @@ public class MainActivity extends AppCompatActivity {
 
         mContext = this;
         initToolbar();
+
+        ArticleUtils articleUtils = new ArticleUtils();
+        String articleContent = "";
+        try {
+            articleContent = FileUtils.readFileFromAssets(mContext, getString(R.string.article_file_name));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (!articleContent.equals("")) {
+            articleDataList = articleUtils.divideArticle(mContext, articleContent);
+        } else {
+            articleDataList = new ArrayList<>();
+        }
+
         initRecyclerView();
+
+        WordsUtils wordsUtils = new WordsUtils();
+        String wordsContent = "";
+        try {
+            wordsContent = FileUtils.readFileFromAssets(mContext, getString(R.string.words_file_name));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (!wordsContent.equals("")) {
+            words = wordsUtils.loadWords(wordsContent);
+            app = (App) getApplication();
+            app.setWords(words);
+        }
+
     }
 
     private void initToolbar() {
@@ -44,14 +84,6 @@ public class MainActivity extends AppCompatActivity {
     private void initRecyclerView() {
         recyclerViewMainActivity = (RecyclerView) findViewById(R.id.recyclerview_activity_main);
         recyclerViewMainActivity.setLayoutManager(new LinearLayoutManager(mContext));
-
-        // TODO 文章分段
-        articleDataList = new ArrayList<>();
-        articleDataList.add(new articleData("Unit 1 Lesson 1", "Finding fossil man", getString(R.string.test_artical_content)));
-        articleDataList.add(new articleData("Unit 1 Lesson 2", "Finding fossil man", getString(R.string.test_artical_content)));
-        articleDataList.add(new articleData("Unit 1 Lesson 3", "Finding fossil man", getString(R.string.test_artical_content)));
-        articleDataList.add(new articleData("Unit 1 Lesson 4", "Finding fossil man", getString(R.string.test_artical_content)));
-
         mainActivityAdapter = new RecyclerViewMainActivityAdapter(mContext, articleDataList);
         recyclerViewMainActivity.setAdapter(mainActivityAdapter);
     }

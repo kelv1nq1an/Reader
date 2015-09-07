@@ -55,18 +55,14 @@
         </ScrollView>
 
         <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            app:dsb_max="6"
-            app:dsb_min="0" />
-
-        <SeekBar
             android:id="@+id/seekbar_articleactivity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:visibility="gone" />
+            app:dsb_indicatorColor="@color/cyan_500"
+            app:dsb_max="5"
+            app:dsb_min="0" />
+
     </RelativeLayout>
 
 
