@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +34,8 @@ public class ArticleActivity extends AppCompatActivity {
     private TextView articleCategoryTV;
     private TextView articleNameTV;
     private TextView articleContentTV;
+    private LinearLayout slidebarLayout;
+    private TextView articleWordsSeekBarText;
     private DiscreteSeekBar articleWordsSeekBar;
 
     private String articleCategory;
@@ -55,12 +58,16 @@ public class ArticleActivity extends AppCompatActivity {
         getIntentData();
         initToolbar();
         initArticle();
+        slidebarLayout = (LinearLayout) findViewById(R.id.slidebar_articleactvity);
+        slidebarLayout.setVisibility(View.GONE);
+        articleWordsSeekBarText = (TextView) findViewById(R.id.slidebar_text_articleactivity);
+        articleWordsSeekBarText.setText(getString(R.string.slidebar_text) + 0);
         articleWordsSeekBar = (DiscreteSeekBar) findViewById(R.id.seekbar_articleactivity);
-        articleWordsSeekBar.setVisibility(View.GONE);
         articleWordsSeekBar.setOnProgressChangeListener(new DiscreteSeekBar.OnProgressChangeListener() {
             @Override
             public void onProgressChanged(DiscreteSeekBar discreteSeekBar, int i, boolean b) {
                 wordLevel = i;
+                articleWordsSeekBarText.setText(getString(R.string.slidebar_text) + wordLevel);
                 switch (i) {
                     case 0:
                         highLightWords(0);
@@ -100,8 +107,6 @@ public class ArticleActivity extends AppCompatActivity {
     }
 
     private void highLightWords(int level) {
-
-
         int number = words[level].length;
         spannableString = new SpannableString(articleContent);
         String word = "";
@@ -192,11 +197,11 @@ public class ArticleActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.article_highlight) {
-            if (articleWordsSeekBar.getVisibility() == View.VISIBLE) {
-                articleWordsSeekBar.setVisibility(View.GONE);
+            if (slidebarLayout.getVisibility() == View.VISIBLE) {
+                slidebarLayout.setVisibility(View.GONE);
                 articleContentTV.setText(articleContent);
             } else {
-                articleWordsSeekBar.setVisibility(View.VISIBLE);
+                slidebarLayout.setVisibility(View.VISIBLE);
                 highLightWords(wordLevel);
             }
             return true;

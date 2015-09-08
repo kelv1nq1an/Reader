@@ -11,4 +11,5 @@
     <string name="article_file_name">new_concept_4th.txt</string>
     <string name="words_file_name">nce4_words</string>
     <string name="highlight_words_article">高亮单词</string>
+    <string name="slidebar_text">当前单词Level：</string>
 </resources>
