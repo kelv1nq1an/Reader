@@ -4,11 +4,13 @@ Reader
 
 Demo下载
 ---
-https://github.com/kelv1nq1an/Reader/releases/tag/v1.0
+https://github.com/kelv1nq1an/Reader/releases
 
 进度
 ---
-完成所有要求，进入测试阶段。
+v1.0完成所有要求，进入测试阶段。
+v1.1添加高亮文字点击提示。
+v1.2文章界面更改背景，slidebar添加常驻文字提示。
 
 要求
 ---
