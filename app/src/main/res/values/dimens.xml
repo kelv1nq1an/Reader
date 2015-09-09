@@ -10,6 +10,7 @@
     <dimen name="body_textsize">14sp</dimen>
     <dimen name="subhead_textsize">16sp</dimen>
     <dimen name="action_textsize">18sp</dimen>
+    <dimen name="medium_textsize">20sp</dimen>
     <dimen name="headline_textsize">24sp</dimen>
     <dimen name="readmore_radius">3dp</dimen>
 </resources>

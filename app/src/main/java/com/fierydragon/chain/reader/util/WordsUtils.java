@@ -1,8 +1,6 @@
 package com.fierydragon.chain.reader.util;
 
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +18,8 @@ public class WordsUtils {
     private int startIndex;
     private int endIndex;
 
+    private String logtext;
+
     public WordsUtils() {
         wordsLevel = 0;
         startIndex = 0;
@@ -35,18 +35,21 @@ public class WordsUtils {
             startIndex = 0;
             endIndex = 0;
             wordsList.clear();
+            logtext = "";
 
             while (wordsContent.indexOf(wordsLevelText, startIndex) != -1) {
                 endIndex = wordsContent.indexOf(wordsLevelText, startIndex);
                 startIndex = wordsContent.substring(0, endIndex).lastIndexOf("\n");
                 word = wordsContent.substring(startIndex, endIndex).trim();
                 wordsList.add(word);
+
+                logtext += "\"" + word + "\",";
+
                 startIndex = wordsContent.indexOf("\n", endIndex);
                 //Log.i(TAG, word);
             }
             words[wordsLevel] = wordsList.toArray(new String[wordsList.size()]);
-            Log.i(TAG, "" + wordsLevelText + "=" + words[wordsLevel].length);
-
+            //Log.i(TAG, "Level" + wordsLevelText + ": [" + logtext + "]");
         }
         return words;
     }

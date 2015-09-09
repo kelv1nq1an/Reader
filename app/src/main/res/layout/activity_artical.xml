@@ -5,80 +5,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/toolbar" />
-
-    <RelativeLayout
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar_article_activity"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/abc_action_bar_default_height_material"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/lime_50"
-            android:layout_above="@+id/slidebar_articleactvity">
+        <include layout="@layout/toolbar" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margin_1"
-                android:layout_marginStart="@dimen/margin_1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/article_name_articleactivity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/margin_2"
-                    android:textSize="@dimen/headline_textsize"
-                    tools:text="Article Name" />
-
-                <TextView
-                    android:id="@+id/article_category_articleactivity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/margin_1"
-                    tools:text="Unit 1 Lesson 1" />
-
-                <TextView
-                    android:id="@+id/article_content_articleactivity"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_1"
-                    android:lineSpacingExtra="5dp"
-                    android:textSize="@dimen/body_textsize"
-                    tools:text="@string/test_artical_content" />
-            </LinearLayout>
-
-        </ScrollView>
-
-        <LinearLayout
-            android:id="@+id/slidebar_articleactvity"
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tab_article_activity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:orientation="vertical">
+            android:background="@color/cyan_500"
+            app:tabIndicatorColor="@color/white"
+            app:tabSelectedTextColor="@color/white"
+            app:tabTextColor="@color/cyan_200" />
+    </android.support.design.widget.AppBarLayout>
 
-            <TextView
-                android:id="@+id/slidebar_text_articleactivity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_1"
-                android:text="@string/slidebar_text" />
-
-            <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
-                android:id="@+id/seekbar_articleactivity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_1"
-                app:dsb_indicatorColor="@color/cyan_500"
-                app:dsb_max="5"
-                app:dsb_min="0" />
-        </LinearLayout>
-
-    </RelativeLayout>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager_article_activity"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/appbar_article_activity"
+        android:background="@color/white" />
 
 </RelativeLayout>

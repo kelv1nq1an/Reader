@@ -12,4 +12,5 @@
     <string name="words_file_name">nce4_words</string>
     <string name="highlight_words_article">高亮单词</string>
     <string name="slidebar_text">当前单词Level：</string>
+    <string name="position">position</string>
 </resources>

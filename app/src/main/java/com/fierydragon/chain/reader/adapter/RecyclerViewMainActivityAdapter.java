@@ -14,19 +14,17 @@ import com.fierydragon.chain.reader.R;
 import com.fierydragon.chain.reader.activity.ArticleActivity;
 import com.fierydragon.chain.reader.data.ArticleData;
 
-import java.util.List;
-
 /**
  * Copyright KelvinQian
  */
 public class RecyclerViewMainActivityAdapter extends RecyclerView.Adapter<RecyclerViewMainActivityAdapter.ViewHolder> {
     private static final String TAG = "RecyclerViewMainActivityAdapter";
     private Context mContext;
-    private List<ArticleData> articleList;
+    private ArticleData articleData;
 
-    public RecyclerViewMainActivityAdapter(Context context, List<ArticleData> list) {
-        this.articleList = list;
+    public RecyclerViewMainActivityAdapter(Context context, ArticleData data) {
         this.mContext = context;
+        this.articleData = data;
     }
 
     @Override
@@ -37,18 +35,15 @@ public class RecyclerViewMainActivityAdapter extends RecyclerView.Adapter<Recycl
 
     @Override
     public void onBindViewHolder(RecyclerViewMainActivityAdapter.ViewHolder holder, final int position) {
-        holder.articleCategory.setText(articleList.get(position).getArticleCategory());
-        holder.articleName.setText(articleList.get(position).getArticleName());
-        holder.articleContent.setText(articleList.get(position).getArticleContent());
+        holder.articleCategory.setText(articleData.getArticle().get(position).getLesson());
+        holder.articleName.setText(articleData.getArticle().get(position).getTitle());
+        holder.articleContent.setText(articleData.getArticle().get(position).getContent());
         //holder.articleImage.setImageResource(articleList.get(position).getArticleImageUrl());
         holder.readMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Toast.makeText(mContext, "click", Toast.LENGTH_SHORT).show();
                 Intent articleIntent = new Intent(mContext, ArticleActivity.class);
-                articleIntent.putExtra(mContext.getString(R.string.article_name), articleList.get(position).getArticleName());
-                articleIntent.putExtra(mContext.getString(R.string.article_category), articleList.get(position).getArticleCategory());
-                articleIntent.putExtra(mContext.getString(R.string.article_content), articleList.get(position).getArticleContent());
+                articleIntent.putExtra(mContext.getString(R.string.position), position);
                 mContext.startActivity(articleIntent);
             }
         });
@@ -56,7 +51,7 @@ public class RecyclerViewMainActivityAdapter extends RecyclerView.Adapter<Recycl
 
     @Override
     public int getItemCount() {
-        return articleList == null ? 0 : articleList.size();
+        return articleData == null ? 0 : articleData.getArticle().size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -66,13 +61,21 @@ public class RecyclerViewMainActivityAdapter extends RecyclerView.Adapter<Recycl
         private TextView readMore;
         private ImageView articleImage;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(final View itemView) {
             super(itemView);
             articleCategory = (TextView) itemView.findViewById(R.id.article_category_item_mainactivity);
             articleName = (TextView) itemView.findViewById(R.id.article_name_item_mainactivity);
             articleContent = (TextView) itemView.findViewById(R.id.article_content_item_mainactivity);
             readMore = (TextView) itemView.findViewById(R.id.read_more_item_mainactivity);
             articleImage = (ImageView) itemView.findViewById(R.id.article_image_item_mainactivity);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent articleIntent = new Intent(mContext, ArticleActivity.class);
+                    articleIntent.putExtra(mContext.getString(R.string.position), getLayoutPosition());
+                    mContext.startActivity(articleIntent);
+                }
+            });
         }
     }
 }

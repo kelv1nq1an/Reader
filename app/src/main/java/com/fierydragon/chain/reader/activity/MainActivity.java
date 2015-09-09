@@ -8,14 +8,16 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.fierydragon.chain.reader.App;
 import com.fierydragon.chain.reader.R;
 import com.fierydragon.chain.reader.adapter.RecyclerViewMainActivityAdapter;
 import com.fierydragon.chain.reader.data.ArticleData;
+import com.fierydragon.chain.reader.data.WordData;
 import com.fierydragon.chain.reader.util.ArticleUtils;
 import com.fierydragon.chain.reader.util.FileUtils;
-import com.fierydragon.chain.reader.util.WordsUtils;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,9 +33,11 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbarMainActivity;
     private RecyclerView recyclerViewMainActivity;
 
-    private List<ArticleData> articleDataList;
-    private String[][] words;
+    private ArticleData articleData;
+    private WordData wordData;
     private RecyclerViewMainActivityAdapter mainActivityAdapter;
+
+    private TextView articletesttext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,31 @@ public class MainActivity extends AppCompatActivity {
 
         mContext = this;
         initToolbar();
+
+        String data = "";
+        try {
+            data = FileUtils.readFileFromAssets(mContext, "articles.json");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Gson articleGson = new Gson();
+        articleData = articleGson.fromJson(data, ArticleData.class);
+
+        try {
+            data = FileUtils.readFileFromAssets(mContext, "words.json");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Gson wordsGson = new Gson();
+        wordData = wordsGson.fromJson(data, WordData.class);
+
+        app = (App) getApplication();
+        app.setArticleData(articleData);
+        app.setWordData(wordData);
+
+        initRecyclerView();
+        /*articletesttext = (TextView) findViewById(R.id.articletext);
 
         ArticleUtils articleUtils = new ArticleUtils();
         String articleContent = "";
@@ -57,10 +86,12 @@ public class MainActivity extends AppCompatActivity {
             articleDataList = new ArrayList<>();
         }
 
-        initRecyclerView();
+        articletesttext.setText(articleUtils.getText());
+*/
 
-        WordsUtils wordsUtils = new WordsUtils();
-        String wordsContent = "";
+
+        //WordsUtils wordsUtils = new WordsUtils();
+        /*String wordsContent = "";
         try {
             wordsContent = FileUtils.readFileFromAssets(mContext, getString(R.string.words_file_name));
         } catch (IOException e) {
@@ -68,10 +99,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (!wordsContent.equals("")) {
-            words = wordsUtils.loadWords(wordsContent);
+            //words = wordsUtils.loadWords(wordsContent);
             app = (App) getApplication();
             app.setWords(words);
-        }
+        }*/
 
     }
 
@@ -84,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
     private void initRecyclerView() {
         recyclerViewMainActivity = (RecyclerView) findViewById(R.id.recyclerview_activity_main);
         recyclerViewMainActivity.setLayoutManager(new LinearLayoutManager(mContext));
-        mainActivityAdapter = new RecyclerViewMainActivityAdapter(mContext, articleDataList);
+        mainActivityAdapter = new RecyclerViewMainActivityAdapter(mContext, articleData);
         recyclerViewMainActivity.setAdapter(mainActivityAdapter);
     }
 

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/slidebar_layout_article_fragment"
+        android:background="@color/lime_50">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_1"
+            android:layout_marginStart="@dimen/margin_1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/article_name_fragment_article"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/margin_2"
+                android:textSize="@dimen/headline_textsize"
+                tools:text="Article Name" />
+
+            <TextView
+                android:id="@+id/article_category_fragment_article"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/margin_1"
+                tools:text="Unit 1 Lesson 1" />
+
+            <TextView
+                android:id="@+id/article_content_article_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_1"
+                android:paddingBottom="@dimen/margin_1"
+                android:lineSpacingExtra="5dp"
+                android:textSize="@dimen/subhead_textsize"
+                tools:text="@string/test_artical_content" />
+        </LinearLayout>
+
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/slidebar_layout_article_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/slidebar_text_article_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_1"
+            android:text="@string/slidebar_text" />
+
+        <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
+            android:id="@+id/seekbar_article_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_1"
+            app:dsb_indicatorColor="@color/cyan_500"
+            app:dsb_max="5"
+            app:dsb_min="0" />
+    </LinearLayout>
+
+</RelativeLayout>

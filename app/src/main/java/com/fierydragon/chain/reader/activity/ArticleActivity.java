@@ -1,28 +1,26 @@
 package com.fierydragon.chain.reader.activity;
 
 import android.content.Context;
-import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.method.LinkMovementMethod;
-import android.text.style.BackgroundColorSpan;
-import android.text.style.ClickableSpan;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.SeekBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.fierydragon.chain.reader.App;
 import com.fierydragon.chain.reader.R;
+import com.fierydragon.chain.reader.adapter.TabFragmentAdapter;
+import com.fierydragon.chain.reader.fragment.ArticleFragment;
+import com.fierydragon.chain.reader.fragment.TranslationFragment;
+import com.fierydragon.chain.reader.fragment.WordsFragment;
 
-import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Copyright KelvinQian
@@ -31,22 +29,20 @@ public class ArticleActivity extends AppCompatActivity {
     private static final String TAG = "ArticleActivity";
     private Context mContext;
     private Toolbar toolbarArticleActivity;
-    private TextView articleCategoryTV;
-    private TextView articleNameTV;
-    private TextView articleContentTV;
-    private LinearLayout slidebarLayout;
-    private TextView articleWordsSeekBarText;
-    private DiscreteSeekBar articleWordsSeekBar;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
 
-    private String articleCategory;
-    private String articleName;
-    private String articleContent;
-    private int wordLevel;
-
-    private SpannableString spannableString;
-
+    private int clickPosition;
+    private int position;
     private App app;
-    private String[][] words;
+
+
+    private TabFragmentAdapter tabFragmentAdapter;
+    private List<Fragment> fragmentList;
+    private ArticleFragment articleFragment;
+    private WordsFragment wordsFragment;
+    private TranslationFragment translationFragment;
+    private List<String> tabTextList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,93 +50,53 @@ public class ArticleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_artical);
 
         mContext = this;
-        wordLevel = 0;
+
         getIntentData();
         initToolbar();
-        initArticle();
-        slidebarLayout = (LinearLayout) findViewById(R.id.slidebar_articleactvity);
-        slidebarLayout.setVisibility(View.GONE);
-        articleWordsSeekBarText = (TextView) findViewById(R.id.slidebar_text_articleactivity);
-        articleWordsSeekBarText.setText(getString(R.string.slidebar_text) + 0);
-        articleWordsSeekBar = (DiscreteSeekBar) findViewById(R.id.seekbar_articleactivity);
-        articleWordsSeekBar.setOnProgressChangeListener(new DiscreteSeekBar.OnProgressChangeListener() {
+        initPagers();
+
+    }
+
+    private void initPagers() {
+        fragmentList = new ArrayList<>();
+
+        articleFragment = new ArticleFragment();
+        wordsFragment = new WordsFragment();
+        translationFragment = new TranslationFragment();
+
+        fragmentList.add(articleFragment);
+        fragmentList.add(wordsFragment);
+        fragmentList.add(translationFragment);
+        tabFragmentAdapter = new TabFragmentAdapter(getSupportFragmentManager(), fragmentList, getTabTextList());
+
+        viewPager = (ViewPager) findViewById(R.id.viewpager_article_activity);
+        viewPager.setAdapter(tabFragmentAdapter);
+
+        tabLayout.setTabsFromPagerAdapter(tabFragmentAdapter);
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
-            public void onProgressChanged(DiscreteSeekBar discreteSeekBar, int i, boolean b) {
-                wordLevel = i;
-                articleWordsSeekBarText.setText(getString(R.string.slidebar_text) + wordLevel);
-                switch (i) {
-                    case 0:
-                        highLightWords(0);
-                        break;
-                    case 1:
-                        highLightWords(1);
-                        break;
-                    case 2:
-                        highLightWords(2);
-                        break;
-                    case 3:
-                        highLightWords(3);
-                        break;
-                    case 4:
-                        highLightWords(4);
-                        break;
-                    case 5:
-                        highLightWords(5);
-                        break;
-                }
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
             }
 
             @Override
-            public void onStartTrackingTouch(DiscreteSeekBar discreteSeekBar) {
+            public void onTabUnselected(TabLayout.Tab tab) {
 
             }
 
             @Override
-            public void onStopTrackingTouch(DiscreteSeekBar discreteSeekBar) {
+            public void onTabReselected(TabLayout.Tab tab) {
 
             }
         });
-
-        app = (App) getApplication();
-        words = app.getWords();
-
-    }
-
-    private void highLightWords(int level) {
-        int number = words[level].length;
-        spannableString = new SpannableString(articleContent);
-        String word = "";
-        for (int i = 0; i < number; i++) {
-            int wordStartIndex = 0;
-            int wordEndIndex = 0;
-            char preChar;
-            char nextChar;
-            word = words[level][i];
-            while (wordStartIndex != -1) {
-                wordStartIndex = articleContent.indexOf(word, wordEndIndex);
-                if (wordStartIndex != -1) {
-                    wordEndIndex = wordStartIndex + word.length();
-                    preChar = articleContent.charAt(wordStartIndex - 1);
-                    nextChar = articleContent.charAt(wordEndIndex);
-                    if (!(Character.isLetter(preChar) || Character.isLetter(nextChar))) {
-                        spannableString.setSpan(new BackgroundColorSpan(Color.YELLOW), wordStartIndex, wordEndIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-                        WordClickableSpan wordClickableSpan = new WordClickableSpan(mContext, word);
-                        spannableString.setSpan(wordClickableSpan, wordStartIndex, wordEndIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    }
-                }
-            }
-
-            Log.i(TAG, "level = " + level + " word = " + word + " start = " + wordStartIndex + " end = " + wordEndIndex);
-        }
-
-        articleContentTV.setText(spannableString);
-        articleContentTV.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     private void initToolbar() {
+        app = (App) getApplication();
+        position = app.getPosition();
         toolbarArticleActivity = (Toolbar) findViewById(R.id.toolbar);
-        toolbarArticleActivity.setTitle("Article");
+        toolbarArticleActivity.setTitle(app.getArticleData().getArticle().get(position).getLesson());
         setSupportActionBar(toolbarArticleActivity);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -152,34 +108,10 @@ public class ArticleActivity extends AppCompatActivity {
         });
     }
 
-    private void initArticle() {
-        articleCategoryTV = (TextView) findViewById(R.id.article_category_articleactivity);
-        articleNameTV = (TextView) findViewById(R.id.article_name_articleactivity);
-        articleContentTV = (TextView) findViewById(R.id.article_content_articleactivity);
-
-        if (!articleCategory.isEmpty()) {
-            articleCategoryTV.setText(articleCategory);
-        } else {
-            articleCategoryTV.setText(getString(R.string.article_category));
-        }
-
-        if (!articleName.isEmpty()) {
-            articleNameTV.setText(articleName);
-        } else {
-            articleNameTV.setText(getString(R.string.article_name));
-        }
-
-        if (!articleContent.isEmpty()) {
-            articleContentTV.setText(articleContent);
-        } else {
-            articleContentTV.setText(getString(R.string.article_content));
-        }
-    }
-
     private void getIntentData() {
-        articleCategory = getIntent().getStringExtra(getString(R.string.article_category));
-        articleName = getIntent().getStringExtra(getString(R.string.article_name));
-        articleContent = getIntent().getStringExtra(getString(R.string.article_content));
+        clickPosition = getIntent().getIntExtra(mContext.getString(R.string.position), 0);
+        App app = (App) getApplication();
+        app.setPosition(clickPosition);
     }
 
     @Override
@@ -197,33 +129,31 @@ public class ArticleActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.article_highlight) {
-            if (slidebarLayout.getVisibility() == View.VISIBLE) {
+            articleFragment.doHighlight();
+            /*if (articleFragment.slidebarLayout.getVisibility() == View.VISIBLE) {
                 slidebarLayout.setVisibility(View.GONE);
                 articleContentTV.setText(articleContent);
             } else {
                 slidebarLayout.setVisibility(View.VISIBLE);
                 highLightWords(wordLevel);
-            }
+            }*/
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
-}
 
-class WordClickableSpan extends ClickableSpan {
+    public List<String> getTabTextList() {
+        tabLayout = (TabLayout) findViewById(R.id.tab_article_activity);
 
-    String wordClicked;
-    Context mContext;
-
-    public WordClickableSpan(Context context, String text) {
-        super();
-        this.mContext = context;
-        wordClicked = text;
-    }
-
-    @Override
-    public void onClick(View view) {
-        Toast.makeText(mContext, wordClicked, Toast.LENGTH_SHORT).show();
+        tabTextList = new ArrayList<>();
+        tabTextList.add("文章");
+        tabTextList.add("新词生词");
+        tabTextList.add("译文");
+        for (int i = 0; i < tabTextList.size(); i++) {
+            tabLayout.addTab(tabLayout.newTab().setText(tabTextList.get(i)));
+        }
+        return tabTextList;
     }
 }
+
